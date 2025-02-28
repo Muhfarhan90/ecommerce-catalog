@@ -7,10 +7,19 @@ import axios from "axios";
 const product = ref(null);
 // fungsi untuk mengambil data produk dari API menggunakan AXIOS
 const getProduct = async () => {
-  const response = await axios.get("https://fakestoreapi.com/products/1");
+  const response = await axios.get(`https://fakestoreapi.com/products/${index.value}`);
   product.value = response.data;
 };
+const index = ref(1);
 
+const nextProduct = async () => {
+  index.value++;
+  if (index.value > 20) {
+    index.value = 1;
+  }
+  const response = await axios.get(`https://fakestoreapi.com/products/${index.value}`);
+  product.value = response.data;
+};
 // jalankan fungsi getProducts() ketika komponen di-mount
 onMounted(() => {
   getProduct();
@@ -36,7 +45,7 @@ onMounted(() => {
         <h2 id="product-price">${{ product.price }}</h2>
         <div class="btn">
           <button id="btn-buy">But now</button>
-          <button id="btn-next">Next Product</button>
+          <button id="btn-next" @click="nextProduct">Next Product</button>
         </div>
       </div>
     </div>
@@ -85,9 +94,14 @@ onMounted(() => {
   margin-bottom: 12px;
 }
 .image-product {
+  max-width: 100%;
+}
+
+.image-product img {
   width: 400px;
   height: 400px;
   display: flex;
+  flex-shrink: 0;
 }
 
 h2 {
@@ -108,6 +122,7 @@ h2 {
   color: white;
   border-radius: 10px;
   width: 100%;
+  cursor: pointer;
 }
 .btn #btn-next {
   padding: 10px 80px;
@@ -117,5 +132,6 @@ h2 {
   border-radius: 10px;
   width: 100%;
   border: 3px solid #720060;
+  cursor: pointer;
 }
 </style>
