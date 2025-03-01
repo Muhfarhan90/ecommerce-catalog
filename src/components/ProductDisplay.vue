@@ -1,34 +1,52 @@
 <script setup>
 import "../assets/style/page.css";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import axios from "axios";
+import sad from "../../public/sad-face.png";
 
-// variabel untuk menyimpan data produk
+// Variabel untuk menyimpan data produk
 const product = ref(null);
-// fungsi untuk mengambil data produk dari API menggunakan AXIOS
+// Variabel untuk menyimpan index produk
+const index = ref(1);
+
+// Fungsi untuk mengambil data produk dari API menggunakan AXIOS
 const getProduct = async () => {
   const response = await axios.get(`https://fakestoreapi.com/products/${index.value}`);
   product.value = response.data;
+  // Hanya menyimpan kategori men's dan women's clothing
+  if (
+    response.data.category.includes("women's clothing") ||
+    response.data.category.includes("men's clothing")
+  ) {
+    product.value = response.data;
+  } else {
+    product.value = null;
+  }
 };
-const index = ref(1);
-
+// Fungsi untuk menampilkan produk berikutnya
 const nextProduct = async () => {
   index.value++;
   if (index.value > 20) {
     index.value = 1;
   }
-  const response = await axios.get(`https://fakestoreapi.com/products/${index.value}`);
-  product.value = response.data;
+  await getProduct();
 };
-// jalankan fungsi getProducts() ketika komponen di-mount
+// Menjalankan fungsi getProducts() ketika komponen di-mount / dimmuat
 onMounted(() => {
   getProduct();
+});
+
+// Computed property untuk menentukan tampilan berdasarkan kategori
+const productCategory = computed(() => {
+  if (product.value?.category.includes("women's clothing")) return "womens";
+  if (product.value?.category.includes("men's clothing")) return "mens";
+  return "unavailable";
 });
 </script>
 
 <template>
-  <div class="background">
-    <!-- Looping untuk menampilkan data produk -->
+  <div :class="['background', productCategory]">
+    <!-- Menampilkan data produk jika ada -->
     <div v-if="product" :key="product.id" class="product">
       <div class="image-product">
         <img :src="product.image" alt="" />
@@ -49,89 +67,17 @@ onMounted(() => {
         </div>
       </div>
     </div>
+    <!-- Menampilkan pesan jika tidak ada data produk -->
+    <div v-else class="unavailable">
+      <div class="product">
+        <img :src="sad" alt="" />
+        <div class="message">
+          <h2>This product is unavailable to show</h2>
+          <button @click="nextProduct" id="btn-next">Next Product</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
-<style scoped>
-.background {
-  background: linear-gradient(to bottom, #fde2ff 60%, #ffffff 40%);
-  height: 100vh;
-  width: 100%;
-  position: absolute;
-}
-
-.product {
-  display: flex;
-  gap: 50px;
-  align-items: center;
-  width: 80%;
-  margin: 0 auto;
-  margin-top: 250px;
-  padding: 50px 56px;
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 2px 4px 21px #dcdcdc;
-}
-#product-title {
-  margin-bottom: 25px;
-  font-size: 28px;
-  color: #720060;
-}
-#product-desc {
-  font-size: 20px;
-  margin-top: 26px;
-  margin-bottom: 62px;
-}
-
-#product-price {
-  margin-top: 16px;
-  margin-bottom: 16px;
-}
-.product-info {
-  display: flex;
-  justify-content: space-between;
-  font-size: 18px;
-  margin-bottom: 12px;
-}
-.image-product {
-  max-width: 100%;
-}
-
-.image-product img {
-  width: 400px;
-  height: 400px;
-  display: flex;
-  flex-shrink: 0;
-}
-
-h2 {
-  color: #720060;
-  font-size: 28px;
-}
-.btn {
-  display: flex;
-  gap: 20px;
-  justify-content: space-between;
-  font-weight: 600;
-}
-
-.btn #btn-buy {
-  padding: 10px 80px;
-  font-size: 20px;
-  background-color: #720060;
-  color: white;
-  border-radius: 10px;
-  width: 100%;
-  cursor: pointer;
-}
-.btn #btn-next {
-  padding: 10px 80px;
-  font-size: 20px;
-  background-color: white;
-  color: #720060;
-  border-radius: 10px;
-  width: 100%;
-  border: 3px solid #720060;
-  cursor: pointer;
-}
-</style>
+<style scoped></style>

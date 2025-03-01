@@ -3,11 +3,209 @@
     margin: 0;
     box-sizing: border-box;
 }
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
 p {
-    color: #1E1E1E;
-    font-weight: 400;
+    color: #3f3f3f;
+}
+
+.background {
+    height: 100vh;
+    width: 100%;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product {
+    display: flex;
+    gap: 50px;
+    align-items: center;
+    width: 60%;
+    margin: 0 auto;
+    padding: 50px 56px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 2px 4px 21px #dcdcdc;
+}
+
+#product-desc {
+    font-size: 20px;
+    margin-top: 26px;
+    margin-bottom: 62px;
+    color: #1f1f1f;
 
 }
-h1 {
-    color: green;
+
+
+
+.product-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+
+.product-detail {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+
+}
+
+.image-product {
+    max-width: 100%;
+}
+
+.image-product img {
+    width: 400px;
+    height: 400px;
+    display: flex;
+    flex-shrink: 0;
+}
+
+.btn {
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+    font-weight: 600;
+}
+
+/* Women's theme */
+.background.womens {
+    background: linear-gradient(to bottom, #fde2ff 60%, #ffffff 40%);
+}
+
+.womens #product-title {
+    margin-bottom: 25px;
+    font-size: 28px;
+    color: #720060;
+}
+
+.womens #product-price {
+    margin-top: 16px;
+    margin-bottom: 16px;
+    color: #720060;
+    font-size: 28px;
+}
+
+.womens .btn #btn-buy {
+    padding: 10px 80px;
+    font-size: 20px;
+    background-color: #720060;
+    color: white;
+    border-radius: 10px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.womens .btn #btn-next {
+    padding: 10px 80px;
+    font-size: 20px;
+    background-color: white;
+    color: #720060;
+    border-radius: 10px;
+    width: 100%;
+    border: 3px solid #720060;
+    cursor: pointer;
+}
+
+
+/* Men's Theme  */
+.background.mens {
+    background: linear-gradient(to bottom, #D6E6FF 60%, #ffffff 40%);
+}
+
+.mens #product-title {
+    margin-bottom: 25px;
+    font-size: 28px;
+    color: #002772;
+}
+
+.mens #product-price {
+    margin-top: 16px;
+    margin-bottom: 16px;
+    color: #002772;
+    font-size: 28px;
+}
+
+.mens .btn #btn-buy {
+    padding: 10px 80px;
+    font-size: 20px;
+    background-color: #002772;
+    color: white;
+    border-radius: 10px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.mens .btn #btn-next {
+    padding: 10px 80px;
+    font-size: 20px;
+    background-color: white;
+    color: #002772;
+    border-radius: 10px;
+    width: 100%;
+    border: 3px solid #002772;
+    cursor: pointer;
+}
+
+/* Unavailable theme */
+.background.unavailable {
+    background: linear-gradient(to bottom, #D8D7D7 60%, #ffffff 40%);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.unavailable {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    width: 100%;
+}
+
+.unavailable .product {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+
+}
+
+.unavailable .product img {
+    height: auto;
+    margin-left: 8rem;
+}
+
+.unavailable .message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    max-width: 90%;
+    z-index: 2;
+    /* Biar ada di atas gambar */
+}
+
+.unavailable .message h2 {
+    font-size: 20px;
+}
+
+.unavailable .product .message #btn-next {
+    padding: 10px 80px;
+    font-size: 20px;
+    background-color: white;
+    color: #000000;
+    border-radius: 4px;
+    width: 100%;
+    border: 3px solid #000000;
+    cursor: pointer;
+    margin-top: 14px;
 }
