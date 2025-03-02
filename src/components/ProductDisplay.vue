@@ -53,6 +53,19 @@ const productCategory = computed(() => {
   if (product.value?.category.includes("men's clothing")) return "mens";
   return "unavailable";
 });
+
+// Computed property untuk tampilan rating circle
+const starRating = computed(() => {
+  if (!product.value) return [];
+  const fullStars = Math.floor(product.value.rating.rate);
+  const halfStar = product.value.rating.rate % 1 >= 0.5 ? 1 : 0;
+  const emptyStars = 5 - fullStars - halfStar;
+  return [
+    ...Array(fullStars).fill("fas fa-circle"), // Bintang penuh
+    ...Array(halfStar).fill("fas fa-circle-half-stroke"), // Setengah bintang
+    ...Array(emptyStars).fill("far fa-circle"), // Bintang kosong
+  ];
+});
 </script>
 
 <template>
@@ -68,12 +81,16 @@ const productCategory = computed(() => {
         <h2 id="product-title">{{ product.title }}</h2>
         <div class="product-info">
           <p>{{ product.category }}</p>
-          <p>{{ product.rating.rate }}/5</p>
+          <div class="rating">
+            <span class="rating-text">{{ product.rating.rate }}/5</span>
+            <span v-for="(star, index) in starRating" :key="index" :class="star"></span>
+          </div>
         </div>
         <hr />
         <p id="product-desc">{{ product.description }}</p>
         <hr />
         <h2 id="product-price">${{ product.price }}</h2>
+        <!-- Tombol -->
         <div class="btn">
           <button id="btn-buy">But now</button>
           <button id="btn-next" @click="nextProduct">Next Product</button>
