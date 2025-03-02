@@ -8,19 +8,30 @@ import sad from "../../public/sad-face.png";
 const product = ref(null);
 // Variabel untuk menyimpan index produk
 const index = ref(1);
-
+// Variabel untuk loading state
+const loading = ref(true);
 // Fungsi untuk mengambil data produk dari API menggunakan AXIOS
 const getProduct = async () => {
-  const response = await axios.get(`https://fakestoreapi.com/products/${index.value}`);
-  product.value = response.data;
-  // Hanya menyimpan kategori men's dan women's clothing
-  if (
-    response.data.category.includes("women's clothing") ||
-    response.data.category.includes("men's clothing")
-  ) {
+  loading.value = true;
+  try {
+    const response = await axios.get(`https://fakestoreapi.com/products/${index.value}`);
     product.value = response.data;
-  } else {
+    // Hanya menyimpan kategori men's dan women's clothing
+    if (
+      response.data.category.includes("women's clothing") ||
+      response.data.category.includes("men's clothing")
+    ) {
+      product.value = response.data;
+    } else {
+      product.value = null;
+    }
+  } catch (error) {
+    console.log("Error fetching product:", error);
     product.value = null;
+  } finally {
+    setTimeout(() => {
+      loading.value = false; //mematikan loading setelah mendapatkan data
+    }, 300);
   }
 };
 // Fungsi untuk menampilkan produk berikutnya
@@ -46,8 +57,10 @@ const productCategory = computed(() => {
 
 <template>
   <div :class="['background', productCategory]">
+    <!-- Tampilan Loading Skeleton -->
+    <div v-if="loading" class="loader"></div>
     <!-- Menampilkan data produk jika ada -->
-    <div v-if="product" :key="product.id" class="product">
+    <div v-else-if="product" :key="product.id" class="product">
       <div class="image-product">
         <img :src="product.image" alt="" />
       </div>
@@ -79,5 +92,3 @@ const productCategory = computed(() => {
     </div>
   </div>
 </template>
-
-<style scoped></style>
